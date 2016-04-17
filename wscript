@@ -13,6 +13,7 @@ def configure(bld):
     bld.load('compiler_cxx')
  
 def build(bld):
+    bld.
     bld.stlib(
             source = "src/CurlWrap.cpp", 
             target="CurlWrap", 

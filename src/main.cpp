@@ -6,15 +6,25 @@ int main(int argc, char* argv[])
 {
 	try 
 	{
-	TCLAP::CmdLine cmd("Command description message", ' ', "0.9");
-	TCLAP::ValueArg<std::string> quoteArg("q","quote","Symbol corresponding to the quote",true,"homer","string");
-	cmd.add(quoteArg);
-	cmd.parse(argc, argv);
-	std::string quote = quoteArg.getValue();
 	
+	// Parse command-line arguments with tclap
+	TCLAP::CmdLine cmd("Command description message", ' ', "0.9");
+	TCLAP::MultiArg<std::string> tickerArg("t","tickers","Symbols corresponding to the tickers","string");
+	cmd.add(tickerArg);
+	TCLAP::SwitchArg l1Switch("l","last","last trade.", cmd, false);
+	TCLAP::SwitchArg c6Switch("c","change","change real time", cmd, false);
+	TCLAP::SwitchArg k2Switch("p","last","percent change real time", cmd, false);
+	cmd.parse(argc, argv);
+	std::vector<std::string> tickers = tickerArg.getValue();
+	
+	// Get the query for Yahoo API
+	URL url(tickers, l1Switch.getValue(), c6Switch.getValue(), k2Switch.getValue());		
+
 	CurlWrap curl;
-	curl.perform("http://download.finance.yahoo.com/d/quotes.csv?s="+quote+"&f=l1");
-	} 
+	curl.perform(url.get());
+	
+	} // try  
+
 
 	catch (const std::runtime_error& e) // catch runtime exceptions
 	{
@@ -24,5 +34,6 @@ int main(int argc, char* argv[])
 	{ 
 		std::cerr << "error: " << e.error() << " for arg " << e.argId() << std::endl; 
 	}
+
 	return 0;
 }
