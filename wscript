@@ -14,14 +14,17 @@ def configure(bld):
  
 def build(bld):
     bld.stlib(
-            source = "src/Screen.cpp", 
-            target="Screen", 
+            source = "src/CurlWrap.cpp", 
+            target="CurlWrap", 
             includes=["include"],
+            #use="termbox",
+            lib = ["curl"],
             cxxflags=["-std=c++14", "-g", "-Wall"])
-         
+
     bld.program(
             source="src/main.cpp", 
-            target="main", 
+            target="fmtl", 
             includes=["include"],
-            cxxflags=["-std=c++14", "-Wall"],
-            use="Screen")
+            use = "CurlWrap",
+            lib = ["curl"],
+            cxxflags=["-std=c++14", "-Wall"])
