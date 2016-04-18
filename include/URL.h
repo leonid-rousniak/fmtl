@@ -9,7 +9,7 @@ class URL
 public:
 	using Tickers = std::vector<std::string>;
 
-	URL(Tickers tickers, bool l1, bool c6, bool k2);
+	URL(Tickers tickers, bool l1, bool c1, bool p2);
 	std::string get(); 	
 
 private:

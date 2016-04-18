@@ -9,16 +9,17 @@ int main(int argc, char* argv[])
 	
 	// Parse command-line arguments with tclap
 	TCLAP::CmdLine cmd("Command description message", ' ', "0.9");
-	TCLAP::MultiArg<std::string> tickerArg("t","tickers","Symbols corresponding to the tickers","string");
+	TCLAP::MultiArg<std::string> tickerArg("t","tickers","Symbols corresponding to the tickers", false, "string");
 	cmd.add(tickerArg);
 	TCLAP::SwitchArg l1Switch("l","last","last trade.", cmd, false);
-	TCLAP::SwitchArg c6Switch("c","change","change real time", cmd, false);
-	TCLAP::SwitchArg k2Switch("p","last","percent change real time", cmd, false);
+	TCLAP::SwitchArg c1Switch("c","change","change real time", cmd, false);
+	TCLAP::SwitchArg p2Switch("p","percent","percent change real time", cmd, false);
+
 	cmd.parse(argc, argv);
 	std::vector<std::string> tickers = tickerArg.getValue();
 	
 	// Get the query for Yahoo API
-	URL url(tickers, l1Switch.getValue(), c6Switch.getValue(), k2Switch.getValue());		
+	URL url(tickers, l1Switch.getValue(), c1Switch.getValue(), p2Switch.getValue());		
 
 	CurlWrap curl;
 	curl.perform(url.get());
