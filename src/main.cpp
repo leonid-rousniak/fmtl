@@ -16,7 +16,7 @@ void ncursesInit()
 	if( has_colors() == false )
 	{	
 		endwin();
-		printf("Your terminal does not support color\n");
+		std::cout << "Your terminal does not support color" << std::endl;
 		exit(1);
 	}
 
@@ -48,7 +48,12 @@ int main(int argc, char* argv[])
 
 	ncursesInit(); 
 
-	Window window(5,5,0,0);	
+	Window window(12,40,13,0);	
+	window.color(1);
+	window.print((char *) "Hello world");
+	window.refresh();
+	getch();
+
  	// Clear ncurses data structures
  	endwin();
 	return 0;
