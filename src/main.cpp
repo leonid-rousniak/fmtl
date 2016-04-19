@@ -11,16 +11,19 @@ void ncursesInit()
 	noecho();
 	keypad(stdscr, TRUE);
 	clear();
+
+	// Check if terminal supports color
 	if( has_colors() == false )
 	{	
 		endwin();
 		printf("Your terminal does not support color\n");
 		exit(1);
 	}
-	start_color();			/* Start color 			*/
+
+	start_color();
 	init_pair(1,COLOR_YELLOW,COLOR_BLUE);
-    init_pair(2,COLOR_BLUE,COLOR_RED);
-    init_pair(3,COLOR_BLUE,COLOR_WHITE); 
+	init_pair(2,COLOR_BLUE,COLOR_RED);
+	init_pair(3,COLOR_BLUE,COLOR_WHITE); 
 }
 
 int main(int argc, char* argv[])
