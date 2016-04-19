@@ -1,8 +1,6 @@
 #pragma once
  
 #include <curl/curl.h>
-#include <string>
-#include <iostream>
 #include <stdexcept>
 
 class CurlWrap
@@ -10,7 +8,7 @@ class CurlWrap
 public:
 	CurlWrap();
 	~CurlWrap();
-	void perform(std::string url);
+	void perform(const char* url);
 
 private:
 	CURL* _curl;

@@ -12,9 +12,9 @@ CurlWrap::~CurlWrap()
 	curl_easy_cleanup(_curl); 
 }
 
-void CurlWrap::perform(std::string url)
+void CurlWrap::perform(const char* url)
 {
-	curl_easy_setopt(_curl, CURLOPT_URL, url.c_str());
+	curl_easy_setopt(_curl, CURLOPT_URL, url);
 	CURLcode res = curl_easy_perform(_curl);
 
 	if( res != CURLE_OK)
