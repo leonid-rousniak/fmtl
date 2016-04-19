@@ -52,7 +52,7 @@ int main(int argc, char* argv[])
 	window.color(1);
 	window.print((char *) "Hello world");
 	window.refresh();
-	getch();
+	wgetch(window.getPtr());
 
  	// Clear ncurses data structures
  	endwin();
