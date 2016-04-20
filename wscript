@@ -1,49 +1,35 @@
 #!/usr/bin/env python
  
-APPNAME = 'waf-project'
-VERSION = '0.1'
+APPNAME = "waf-project"
+VERSION = "0.1"
  
-top = '.'
-out = 'build'
-libdep = ['curl', 'ncurses']
+top = "."
+out = "build"
+libdep = ["curl", "ncurses"]
 
 wafObjects = ["CurlWrap", "Window", "Screen"]
  
 def options(bld):
-    bld.load('compiler_cxx')
+    bld.load("compiler_cxx")
 
 def configure(conf):
     conf.load("compiler_cxx")
  
 def build(bld):
-    bld.objects(
-            source = "src/CurlWrap.cpp", 
-            target="CurlWrap", 
-            includes=["include"],
-            #use="termbox",
-            lib = libdep,
-            cxxflags=["-std=c++14", "-g", "-Wall"])
 
-    bld.objects(
-            source = "src/Window.cpp", 
-            target="Window", 
-            includes=["include"],
-            #use="termbox",
-            lib = libdep,
-            cxxflags=["-std=c++14", "-g", "-Wall"])
-
-    bld.objects(
-            source = "src/Screen.cpp", 
-            target="Screen", 
-            includes=["include"],
-            #use="termbox",
-            lib = libdep,
-            cxxflags=["-std=c++14", "-g", "-Wall"])
+    for wobj in wafObjects:
+        bld.objects(
+                source = "src/" + wobj + ".cpp", 
+                target=wobj, 
+                includes=["include"],
+                #use="termbox",
+                lib = libdep,
+                cxxflags=["-std=c++14", "-g", "-Wall"])
 
     bld.program(
             source="src/main.cpp", 
             target="fmtl", 
             includes=["include"],
-            use = "CurlWrap Window Screen",
+            use = wafObjects, 
             lib = libdep,
             cxxflags=["-std=c++14", "-Wall"])
