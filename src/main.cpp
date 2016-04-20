@@ -2,7 +2,6 @@
 #include <iostream>
 #include "CurlWrap.h"
 #include "fmtl.h"
-#include "Window.h"
 #include "Screen.h"
 
 
@@ -27,12 +26,12 @@ int main(int argc, char* argv[])
 	}
 
 	Screen screen;
-	Window window(12,40,13,0);	
+	screen.setup(5);
+	screen.forEachW1([] (Window win) { win.color(1); });
+	Window window(13,0,1);	
 	window.color(2);
-	window.print((char *) "Hello world");
 	window.refresh();
 	wgetch(window.getPtr());
 
- 	// Clear ncurses data structures
 	return 0;
 }
