@@ -22,7 +22,6 @@ def build(bld):
                 source = "src/" + wobj + ".cpp", 
                 target=wobj, 
                 includes=["include"],
-                #use="termbox",
                 lib = libdep,
                 cxxflags=["-std=c++14", "-g", "-Wall"])
 

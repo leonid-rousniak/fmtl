@@ -28,7 +28,7 @@ int main(int argc, char* argv[])
 
 	Screen screen;
 	Window window(12,40,13,0);	
-	window.color(1);
+	window.color(2);
 	window.print((char *) "Hello world");
 	window.refresh();
 	wgetch(window.getPtr());
