@@ -3,28 +3,8 @@
 #include "CurlWrap.h"
 #include "fmtl.h"
 #include "Window.h"
+#include "Screen.h"
 
-void ncursesInit()
-{
-	initscr();
-	cbreak();
-	noecho();
-	keypad(stdscr, TRUE);
-	clear();
-
-	// Check if terminal supports color
-	if( has_colors() == false )
-	{	
-		endwin();
-		std::cout << "Your terminal does not support color" << std::endl;
-		exit(1);
-	}
-
-	start_color();
-	init_pair(1,COLOR_YELLOW,COLOR_BLUE);
-	init_pair(2,COLOR_BLUE,COLOR_RED);
-	init_pair(3,COLOR_BLUE,COLOR_WHITE); 
-}
 
 int main(int argc, char* argv[])
 {
@@ -46,8 +26,7 @@ int main(int argc, char* argv[])
 		std::cerr << e.what();
 	}
 
-	ncursesInit(); 
-
+	Screen screen;
 	Window window(12,40,13,0);	
 	window.color(1);
 	window.print((char *) "Hello world");
@@ -55,6 +34,5 @@ int main(int argc, char* argv[])
 	wgetch(window.getPtr());
 
  	// Clear ncurses data structures
- 	endwin();
 	return 0;
 }

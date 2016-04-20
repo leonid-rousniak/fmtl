@@ -6,6 +6,8 @@ VERSION = '0.1'
 top = '.'
 out = 'build'
 libdep = ['curl', 'ncurses']
+
+wafObjects = ["CurlWrap", "Window", "Screen"]
  
 def options(bld):
     bld.load('compiler_cxx')
@@ -30,10 +32,18 @@ def build(bld):
             lib = libdep,
             cxxflags=["-std=c++14", "-g", "-Wall"])
 
+    bld.objects(
+            source = "src/Screen.cpp", 
+            target="Screen", 
+            includes=["include"],
+            #use="termbox",
+            lib = libdep,
+            cxxflags=["-std=c++14", "-g", "-Wall"])
+
     bld.program(
             source="src/main.cpp", 
             target="fmtl", 
             includes=["include"],
-            use = "CurlWrap Window",
+            use = "CurlWrap Window Screen",
             lib = libdep,
             cxxflags=["-std=c++14", "-Wall"])
