@@ -2,7 +2,7 @@
 #include <iostream>
 #include "CurlWrap.h"
 #include "fmtl.h"
-#include "Screen.h"
+#include "WindowManager.h"
 
 
 int main(int argc, char* argv[])
@@ -25,9 +25,9 @@ int main(int argc, char* argv[])
 		std::cerr << e.what();
 	}
 
-	Screen screen;
+	WindowManager screen;
 	screen.setup(5);
-	screen.forEachW1([] (Window win) { win.color(1); });
+	screen.forEachW1([] (Window win) { win.color(2); });
 	Window window(13,0,1);	
 	window.color(2);
 	window.refresh();
