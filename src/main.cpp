@@ -26,18 +26,14 @@ int main(int argc, char* argv[])
 	}*/
 	uint32_t ch;
 	Screen screen;
-	std::vector<Window> windows;
-	windows.reserve(2);
-	windows[0] = Window(5,5,5,5);
-	windows[0].color(2);
-	windows[0].refresh();
-	windows[1] = Window(5,5,10,10);
-	windows[1].color(2);
-	windows[1].refresh();
+
+	getch();
+	for (uint32_t i = 0; i < 5; ++i)
+		screen.addWindow(Window(5,5,5*i,5*i));
 
 	while((ch = getch()) != KEY_BACKSPACE) {	
-
-
+		screen.forEach([] (Window& win) { win.color(2); });
+					
 	}
 
 	return 0;
