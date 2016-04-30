@@ -1,62 +1,62 @@
 #include "Window.h"
 
+/* Constructor, default is deleted */
 Window::Window(uint32_t nrow, uint32_t ncol, uint32_t y, uint32_t x)
-{
-	_window = newwin(nrow,ncol,y,x);
-	getmaxyx(_window, _nrow, _ncol);
-	getbegyx(_window, _y, _x);
-	std::cout << "Window is constructed!" << std::endl;
-}
+	: _window(newwin(nrow, ncol, y, x)),
+	  _size(std::pair<uint32_t, uint32_t> (nrow, ncol)),
+	  _pos(std::pair<uint32_t, uint32_t> (y, x)) {}
 
+/* Copy constructor */
 Window::Window(const Window& other)
+	: _window(newwin(other._size.first,other._size.second,other._pos.first,other._pos.second)), 
+	  _size(other._size), 
+	  _pos(other._pos) {}
+
+/* Move constructor */
+Window::Window (Window&& other) noexcept
+	: _window(other._window),
+	  _size(other._size),
+	  _pos(other._pos)
 {
-	std::cout << "Copy constructor!" << std::endl;
-	uint32_t nrow, ncol, y, x; 
-	other.size(nrow,ncol);
-	other.beg(y,x);
-
-    // allocate new memory and copy the elements
-    WINDOW* new_window = newwin(nrow,ncol,y,x);
-	overlay(other._window, new_window);
-
-    //Then copy the value from the passed object
-	_window = new_window;
+	other._window = nullptr;
 }
 
+/* Copy assignment operator */
 Window& Window::operator= (const Window& other)
 {
-    if (this != &other) // protect against invalid self-assignment
-    {
-		// get window size and beginning coordinates
-		uint32_t nrow, ncol, y, x; 
-		other.size(nrow,ncol);
-		other.beg(y,x);
-
-        // allocate new memory and copy the elements
-        WINDOW* new_window = newwin(nrow,ncol,y,x);
-		overlay(other._window, new_window);
-
-        // deallocate old memory
-		delwin(_window);
-
-        // assign the new memory to the object
-        _window = new_window;
+    if (this != &other) { // protect against invalid self-assignment
+		Window tmp(other);
+		*this = std::move(tmp);
     }
-	std::cout << "assignment operator" << std::endl;
+
+	else 
+		std::cout << "Self-assignment !!?" << std::endl;
 
     return *this;
 }
 
-Window::~Window()
+/* Move assignment operator */
+Window& Window::operator= (Window&& other) noexcept
 {
 	delwin(_window);
-	std::cout << "Window is destroyed!" << std::endl;
+	_window = other._window;
+	other._window = nullptr;
+	return *this;
+}
+
+/* Destructor */
+Window::~Window() noexcept
+{
+	delwin(_window);
 }
 
 
 void Window::move(uint32_t y, uint32_t x) 
 { 
-	mvwin(_window, _y+y, _x+x); 
-	_y = _y+y;
-	_x = _x+x;
+	uint32_t newy = y + _pos.first;
+	uint32_t newx = x + _pos.second;
+	mvwin(_window, newy, newx); 
+	_pos.first = newy;
+	_pos.second = newx;
+	refresh();
 }

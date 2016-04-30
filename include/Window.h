@@ -4,27 +4,30 @@
 #include <ncurses.h>
 #include <iostream>
 #include <cstdint>
+#include <tuple>
 
 class Window
 {
 public:
+	using vec2d = std::pair<uint32_t, uint32_t>;
+
 	Window() = delete;
 	Window(uint32_t nrow, uint32_t ncol, uint32_t y, uint32_t x);
-	Window& operator= (const Window& other);
 	Window(const Window& b);
-	~Window();
-	inline void color(uint32_t pairNumber) { wbkgd(_window ,COLOR_PAIR(pairNumber)); }
-	inline void print(char* text) { wprintw(_window, text); }
+	Window(Window&& b) noexcept;
+	Window& operator= (const Window& other);
+	Window& operator= (Window&& other) noexcept;
+	~Window() noexcept;
+
+	inline void color(uint32_t pairNumber) { wbkgd(_window ,COLOR_PAIR(pairNumber)); refresh(); }
+	inline void print(char* text) { wprintw(_window, text); refresh(); }
 	inline void refresh() { wrefresh(_window); }
-	inline void size(uint32_t& y, uint32_t& x) const { getmaxyx(_window,y,x); }
-	inline void beg(uint32_t& y, uint32_t& x) const { getbegyx(_window,y,x); }
+	inline vec2d size() const { return _size; }
+	inline vec2d pos() const { return _pos; }
 	void move(uint32_t y, uint32_t x); 
-	inline WINDOW* getPtr() { return _window; }
 
 private:
 	WINDOW* _window;
-	uint32_t _nrow;
-	uint32_t _ncol;	
-	uint32_t _y;
-	uint32_t _x;
+	vec2d _size;
+	vec2d _pos;
 };

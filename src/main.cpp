@@ -26,29 +26,18 @@ int main(int argc, char* argv[])
 	}*/
 	uint32_t ch;
 	Screen screen;
-	Window win1(5,5,5,5);
-	win1.color(2);
-	win1.refresh();
+	std::vector<Window> windows;
+	windows.reserve(2);
+	windows[0] = Window(5,5,5,5);
+	windows[0].color(2);
+	windows[0].refresh();
+	windows[1] = Window(5,5,10,10);
+	windows[1].color(2);
+	windows[1].refresh();
 
-	while((ch = getch()) != KEY_BACKSPACE)
-	{	switch(ch)
-		{	case KEY_LEFT:
-				win1.move(0,-1);
-				win1.refresh();
-				break;
-			case KEY_RIGHT:
-				win1.move(0,1);
-				win1.refresh();
-				break;
-			case KEY_UP:
-				win1.move(-1,0);
-				win1.refresh();
-				break;
-			case KEY_DOWN:
-				win1.move(1,0);
-				win1.refresh();
-				break;	
-		}
+	while((ch = getch()) != KEY_BACKSPACE) {	
+
+
 	}
 
 	return 0;
