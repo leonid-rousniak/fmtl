@@ -1,19 +1,17 @@
 #include "Window.h"
 
-Window::Window(int y, int x, int category)
+Window::Window(uint32_t nrow, uint32_t ncol, uint32_t y, uint32_t x)
 {
-	switch(category)
-	{
-		case 1: _window = newwin(2,12,y,x);
-		case 2: _window = newwin(2,16,y,x);
-		case 3: _window = newwin(24,52,y,x); 
-	}
-	std::cout << "Constructor is used!" << std::endl;
+	_window = newwin(nrow,ncol,y,x);
+	getmaxyx(_window, _nrow, _ncol);
+	getbegyx(_window, _y, _x);
+	std::cout << "Window is constructed!" << std::endl;
 }
 
 Window::Window(const Window& other)
 {
-	int nrow, ncol, y, x; 
+	std::cout << "Copy constructor!" << std::endl;
+	uint32_t nrow, ncol, y, x; 
 	other.size(nrow,ncol);
 	other.beg(y,x);
 
@@ -30,7 +28,7 @@ Window& Window::operator= (const Window& other)
     if (this != &other) // protect against invalid self-assignment
     {
 		// get window size and beginning coordinates
-		int nrow, ncol, y, x; 
+		uint32_t nrow, ncol, y, x; 
 		other.size(nrow,ncol);
 		other.beg(y,x);
 
@@ -43,14 +41,22 @@ Window& Window::operator= (const Window& other)
 
         // assign the new memory to the object
         _window = new_window;
-		_focused = other._focused;
     }
-	std::cout << "assignment constructor" << std::endl;
-    // by convention, always return *this
+	std::cout << "assignment operator" << std::endl;
+
     return *this;
 }
 
 Window::~Window()
 {
 	delwin(_window);
+	std::cout << "Window is destroyed!" << std::endl;
+}
+
+
+void Window::move(uint32_t y, uint32_t x) 
+{ 
+	mvwin(_window, _y+y, _x+x); 
+	_y = _y+y;
+	_x = _x+x;
 }
