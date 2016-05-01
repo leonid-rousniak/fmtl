@@ -1,7 +1,8 @@
 #pragma once
  
 #include <curl/curl.h>
-#include <stdexcept>
+#include <stdexcept> 
+#include <string>
 
 class CurlWrap
 {

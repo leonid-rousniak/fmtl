@@ -2,6 +2,7 @@
 
 CurlWrap::CurlWrap() 
 {
+	curl_global_init(CURL_GLOBAL_ALL);
 	_curl = curl_easy_init();
 	if( !_curl )
 		throw std::runtime_error("Was not able to init curl");
@@ -10,6 +11,7 @@ CurlWrap::CurlWrap()
 CurlWrap::~CurlWrap()
 {
 	curl_easy_cleanup(_curl); 
+	curl_global_cleanup();
 }
 
 void CurlWrap::perform(const char* url)

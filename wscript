@@ -20,7 +20,7 @@ def build(bld):
     for wobj in wafObjects:
         bld.objects(
                 source = "src/" + wobj + ".cpp", 
-                target=wobj, 
+                target = wobj, 
                 includes=["include"],
                 lib = libdep,
                 cxxflags=["-std=c++14", "-g", "-Wall"])
