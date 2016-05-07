@@ -28,7 +28,4 @@ Screen::~Screen()
  	endwin();
 }
 
-void Screen::addWindow(Window&& window)
-{
-	_windows.push_back(window);
-}
+

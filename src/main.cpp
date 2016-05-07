@@ -35,6 +35,9 @@ int main(int argc, char* argv[])
 
 	screen.apply(0, [] (Window& win) { win.color(3); });
 
+	Window centralWin(25,55,0,25);
+	centralWin.color(1);
+
 	uint32_t row = 0;
 	
 	while((ch = getch()) != KEY_BACKSPACE) {	

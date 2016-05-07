@@ -11,7 +11,7 @@ class Screen
 public:
 	Screen();
 	~Screen();
-	void addWindow(Window&& window);
+	inline void addWindow(Window&& window) { _windows.push_back(window); }
 	inline size_t size() { return _windows.size(); }
 
 	template <typename... Fs>
@@ -32,5 +32,4 @@ public:
 
 private:
 	std::vector<Window> _windows;
-	Window _central;
 };
