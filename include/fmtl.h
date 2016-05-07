@@ -2,18 +2,38 @@
 
 #include <vector>
 #include <string>
+#include <fstream>
+#include <sstream>
+#include <curl/curl.h>
 
-// Generic free functions
+/* Generic functions */
 namespace fmtl
 {
 
-std::string getUrl(std::vector<char*> tickers)
+/* 
+ * callback function writes data to a std::ostream,
+ * stolen from http://www.cplusplus.com/forum/unices/45878/
+ */
+static size_t data_write(void* buf, size_t size, size_t nmemb, void* userp)
+{
+	if(userp)
+	{
+		std::ostream& os = *static_cast<std::ostream*>(userp);
+		std::streamsize len = size * nmemb;
+		if(os.write(static_cast<char*>(buf), len))
+			return len;
+	}
+
+	return 0;
+}
+
+std::string getUrl(std::vector<std::string> tickers)
 {
 	std::string urlQuery = "http://download.finance.yahoo.com/d/quotes.csv?";
 	
 	// parsing ticker symbols
 	urlQuery += "s=";
-	for (const auto& s : tickers) urlQuery += std::string(s) + "+";
+	for (const auto& ticker : tickers) urlQuery += ticker + "+";
 	urlQuery.pop_back();
 
 	// adding info options
@@ -22,31 +42,24 @@ std::string getUrl(std::vector<char*> tickers)
 	return urlQuery;
 }
 
-
-std::string curlQuery(std::string url)
+CURLcode curl_read(const std::string& url, std::ostream& os)
 {
-	curl_global_init(CURL_GLOBAL_ALL);
-	curlHandle = curl_easy_init();
-	if (!curlHandle)
-		throw std::runtime_error("Was not able to init curl");
+	CURLcode code(CURLE_FAILED_INIT);
+	CURL* curl = curl_easy_init();
 
-	curl_easy_setopt(curlHandle, CURLOPT_URL, url);
-
-	std::string data;
-	curl_easy_setopt(curlHandle, CURLOPT_WRITEFUNCTION,
-			[&data] (char* buf, size_t size, size_t nmemb, void* up) 
-			{
-				for (uint32_t i = 0; i < size*nmemb; ++i)
-					data.push_back(buf[i]);
-
-				return size*nmemb; //tell curl how many bytes we handled
-			});
-
-	CURLcode res = curl_easy_perform(curlHandle);
-
-	if( res != CURLE_OK)
-		throw std::runtime_error("curl_easy_perform() failed: invalid url\n");
-
-}	
+	if (curl)
+	{
+		if (CURLE_OK == (code = curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, &data_write))
+		&& CURLE_OK == (code = curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 1L))
+		&& CURLE_OK == (code = curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L))
+		&& CURLE_OK == (code = curl_easy_setopt(curl, CURLOPT_FILE, &os))
+		&& CURLE_OK == (code = curl_easy_setopt(curl, CURLOPT_URL, url.c_str())))
+		{
+			code = curl_easy_perform(curl);
+		}
+		curl_easy_cleanup(curl);
+	}
+	return code;
+}
 
 } // namespace fmtl

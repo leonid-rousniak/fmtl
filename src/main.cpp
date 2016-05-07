@@ -1,28 +1,24 @@
 #include <iterator>
 #include <iostream>
-#include "CurlWrap.h"
 #include "fmtl.h"
 #include "Screen.h"
 
 int main(int argc, char* argv[])
 {
-	/*try 
-	{
-	
-	std::vector<char*> tickers(argv+1, argv + argc);
-	
-	// Get the query for Yahoo API
-	std::string url = fmtl::getUrl(tickers);	
+	curl_global_init(CURL_GLOBAL_ALL);	
+	std::ostringstream oss;
 
-	CurlWrap curl;
-	curl.perform(url.c_str());
-	
-	} // try  
+	std::string csvStr;
+	std::vector<std::string> tickers = {"AAPL", "GOOG"};
+	std::string url = fmtl::getUrl(tickers);
+	if (CURLE_OK == fmtl::curl_read(url, oss)) {
+		csvStr = oss.str();
+	}
 
-	catch (const std::runtime_error& e) // catch runtime exceptions
-	{
-		std::cerr << e.what();
-	}*/
+	std::cout << csvStr << std::endl;
+
+	curl_global_cleanup();
+	/*
 	uint32_t ch;
 	Screen screen;
 
@@ -58,6 +54,6 @@ int main(int argc, char* argv[])
 				break;	
 		}
 	}
-
+	*/
 	return 0;
 }
