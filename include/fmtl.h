@@ -11,7 +11,13 @@
 namespace fmtl
 {
 
+/* some lambdas to use with lambdaList */
 auto colorBG = [] (Window& win) { win.color(2); };
+
+auto printLeonid = [] (Window& win) { win.print(0,0,"Hello Leonid"); };
+
+
+
 /* 
  * callback function writes data to a std::ostream,
  * stolen from http://www.cplusplus.com/forum/unices/45878/

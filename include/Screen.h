@@ -11,7 +11,6 @@ public:
 	Screen();
 	~Screen();
 	void addWindow(Window&& window);
-	//void setup(int nTickers);
 	inline void forEach(auto lambda) { std::for_each(begin(_windows), end(_windows), lambda); }
 	inline size_t size() { return _windows.size(); }
 
