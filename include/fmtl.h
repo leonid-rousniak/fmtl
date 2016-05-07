@@ -11,6 +11,7 @@
 namespace fmtl
 {
 
+
 /* some lambdas to use with lambdaList */
 auto colorBG = [] (Window& win) { win.color(2); };
 

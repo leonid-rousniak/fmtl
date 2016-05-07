@@ -1,19 +1,8 @@
 #include <iterator>
 #include <iostream>
-#include "fmtl.h"
 #include "Screen.h"
+#include "fmtl.h"
 
-
-/* lambdaList is a facilty to use void lambdas sequentially            * 
- * It is useful when used in conjunction with window-specific function */
-template <typename... Fs>
-auto lambdaList(Fs... fs) { 
-    using swallow = int [];
-    return [=](auto&... args) {
-        (void)swallow{0,
-			(void(fs(args...)), 0)...};
-    };
-}
 
 int main(int argc, char* argv[])
 {
@@ -39,7 +28,7 @@ int main(int argc, char* argv[])
 	for (uint32_t i = 0; i < 5; ++i)
 		screen.addWindow(Window(2,25,5*i,0));
 
-	screen.forEach(lambdaList(fmtl::colorBG, fmtl::printLeonid));
+	screen.forEach(fmtl::colorBG, fmtl::printLeonid);
 	screen.forEach([] (Window& win) { win.print(1,0,"Second line"); });
 	screen.apply(0, [] (Window& win) { win.color(3); });
 
