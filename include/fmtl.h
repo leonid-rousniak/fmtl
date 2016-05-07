@@ -5,11 +5,13 @@
 #include <fstream>
 #include <sstream>
 #include <curl/curl.h>
+#include "Window.h"
 
 /* Generic functions */
 namespace fmtl
 {
 
+auto colorBG = [] (Window& win) { win.color(2); };
 /* 
  * callback function writes data to a std::ostream,
  * stolen from http://www.cplusplus.com/forum/unices/45878/

@@ -5,6 +5,7 @@
 
 int main(int argc, char* argv[])
 {
+	/*
 	curl_global_init(CURL_GLOBAL_ALL);	
 	std::ostringstream oss;
 
@@ -18,15 +19,16 @@ int main(int argc, char* argv[])
 	std::cout << csvStr << std::endl;
 
 	curl_global_cleanup();
-	/*
+	*/
+	
 	uint32_t ch;
 	Screen screen;
 
 	for (uint32_t i = 0; i < 5; ++i)
 		screen.addWindow(Window(2,25,5*i,0));
 
-	screen.forEach([] (Window& win) { win.color(2); });
-	screen.forEach([] (Window& win) { win.print(0,0,"Hello Leonid"); });
+	screen.forEach(fmtl::colorBG);
+	//screen.forEach([] (Window& win) { win.print(0,0,"Hello Leonid"); });
 	screen.forEach([] (Window& win) { win.print(1,0,"Second line"); });
 	screen.apply(0, [] (Window& win) { win.color(3); });
 
@@ -52,8 +54,11 @@ int main(int argc, char* argv[])
 				++row;
 				screen.apply(row, [] (Window& win) { win.color(3); });
 				break;	
+
+			case 'a':
+				screen.forEach([] (Window& win) { win.print(1,0,"Updated!"); });
 		}
 	}
-	*/
+	
 	return 0;
 }

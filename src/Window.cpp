@@ -58,5 +58,5 @@ void Window::move(uint32_t y, uint32_t x)
 	mvwin(_window, newy, newx); 
 	_pos.first = newy;
 	_pos.second = newx;
-	refresh();
+	wrefresh(_window);
 }
