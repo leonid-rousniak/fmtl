@@ -7,7 +7,6 @@ Screen::Screen()
 	cbreak();
 	noecho();
 	keypad(stdscr, TRUE);
-	printw("press F1 to exit");
 	refresh();
 
 	// Check if terminal supports color

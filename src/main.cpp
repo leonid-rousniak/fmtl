@@ -28,8 +28,11 @@ int main(int argc, char* argv[])
 	for (uint32_t i = 0; i < 5; ++i)
 		screen.addWindow(Window(2,25,5*i,0));
 
-	screen.forEach(fmtl::colorBG, fmtl::printLeonid);
-	screen.forEach([] (Window& win) { win.print(1,0,"Second line"); });
+	screen.forEach(
+		[] (Window& win) { win.color(2); },
+		[] (Window& win) { win.print(0,0,"Hello Leonid"); },
+		[] (Window& win) { win.print(1,0,"Second line"); });
+
 	screen.apply(0, [] (Window& win) { win.color(3); });
 
 	uint32_t row = 0;

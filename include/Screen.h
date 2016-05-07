@@ -17,18 +17,20 @@ public:
 	template <typename... Fs>
 	void forEach(Fs... fs)
 	{
-		auto composed = lambdaList(fs...);
-		std::for_each(begin(_windows), end(_windows), composed); 
+		std::for_each(begin(_windows), end(_windows), lambdaList(fs...));
+		refresh();
 	}
 
-	inline void apply(uint32_t row, auto lambda) // inlined because of the lambda
+	template <typename... Fs>
+	void apply(uint32_t row, Fs... fs)
 	{
 		if (row >= 0 and row < size()) {
-			lambda(_windows[row]);
+			lambdaList(fs...)(_windows[row]);
 			refresh();
 		}
 	}
 
 private:
 	std::vector<Window> _windows;
+	Window _central;
 };
