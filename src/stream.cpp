@@ -54,8 +54,9 @@ void update(Window& centralWin, YahooRow& yahooRow)
 {
 	centralWin.print(0,0,ascii::generator(yahooRow["ticker"]).c_str());
 	centralWin.print(5,0,ascii::generator(yahooRow["lastTrade"]).c_str());
-	centralWin.print(10,0,"avg volume:");
-	centralWin.print(10,15,yahooRow["avgVolume"].c_str());
+	centralWin.print(10,0,yahooRow["name"].c_str());
+	centralWin.print(11,0,"avg volume:");
+	centralWin.print(11,15,yahooRow["avgVolume"].c_str());
 }
 
 } // namespace stream 
