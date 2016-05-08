@@ -22,7 +22,6 @@ int main(int argc, char* argv[])
 
 	std::vector<central::YahooRow> table = central::tokenize(csvStr);
 	
-	uint32_t ch;
 	Screen screen;
 
 	for (uint32_t i = 0; i < 5; ++i)
@@ -39,8 +38,8 @@ int main(int argc, char* argv[])
 	centralWin.color(3);
 	central::update(centralWin,table[0]);
 
+	uint32_t ch;
 	uint32_t row = 0;
-	
 	while((ch = getch()) != KEY_BACKSPACE) {	
 		switch(ch)
 		{	
@@ -63,7 +62,13 @@ int main(int argc, char* argv[])
 				break;	
 
 			case 'a':
-				screen.forEach([] (Window& win) { win.print(1,0,"Updated!"); });
+				screen.forEach([] (Window& win) {
+					win.clear();
+					win.color(2);
+					win.print(1,0,"Updated!"); 
+				});
+				break;
+
 		}
 	}
 	
