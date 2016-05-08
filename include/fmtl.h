@@ -37,7 +37,7 @@ std::string getUrl(std::vector<std::string> tickers)
 	urlQuery.pop_back();
 
 	// adding info options
-	urlQuery += "&f=snl1c1p2oghjkva2r2rdyj3j1";
+	urlQuery += "&f=st1nl1c1p2oghjkva2r2rdyj3j1";
 	
 	return urlQuery;
 }

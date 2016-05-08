@@ -27,19 +27,22 @@ int main(int argc, char* argv[])
 	for (uint32_t i = 0; i < 5; ++i)
 		screen.addWindow(Window(2,25,2*i,0));
 
+
 	screen.forEach(
-		[] (auto& win) { win.print(0,0,"Hello Leonid"); },
-		[] (auto& win) { win.print(1,0,"Second line"); },
+		[] (auto& win) {
+			win.print(0, 0, table["ticker"].c_str());
+			win.print(1, 0, table["time"].c_str()); 
+		},
 		[] (auto& win) { win.color(2); });
 
-	screen.apply(0, [] (Window& win) { win.color(3); });
+	uint32_t row = 0;
+	screen.apply(row, [] (Window& win) { win.color(3); });
 
 	Window centralWin(25,55,0,25);
 	centralWin.color(3);
 	stream::update(centralWin,table[0]);
 
 	uint32_t ch;
-	uint32_t row = 0;
 	while((ch = getch()) != KEY_BACKSPACE) {	
 		switch(ch)
 		{	

@@ -8,6 +8,7 @@ std::vector<YahooRow> tokenize(const std::string& str)
 {
 	std::vector<std::string> fields = {
 		"ticker",
+		"time",
 		"name",
 		"lastTrade",
 		"change",
