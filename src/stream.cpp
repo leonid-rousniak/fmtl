@@ -1,7 +1,7 @@
-#include "central.h"
+#include "stream.h"
 #include "ascii.h"
 
-namespace central
+namespace stream
 {
 
 std::vector<YahooRow> tokenize(const std::string& str)
@@ -55,4 +55,4 @@ void update(Window& centralWin, YahooRow& yahooRow)
 	centralWin.print(10,15,yahooRow["avgVolume"].c_str());
 }
 
-} // namespace central
+} // namespace stream 

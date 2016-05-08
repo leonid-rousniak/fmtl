@@ -2,7 +2,7 @@
 #include <iostream>
 #include "Screen.h"
 #include "fmtl.h"
-#include "central.h"
+#include "stream.h"
 
 
 int main(int argc, char* argv[])
@@ -20,7 +20,7 @@ int main(int argc, char* argv[])
 
 	curl_global_cleanup();
 
-	std::vector<central::YahooRow> table = central::tokenize(csvStr);
+	std::vector<stream::YahooRow> table = stream::tokenize(csvStr);
 	
 	Screen screen;
 
@@ -36,7 +36,7 @@ int main(int argc, char* argv[])
 
 	Window centralWin(25,55,0,25);
 	centralWin.color(3);
-	central::update(centralWin,table[0]);
+	stream::update(centralWin,table[0]);
 
 	uint32_t ch;
 	uint32_t row = 0;
@@ -50,7 +50,7 @@ int main(int argc, char* argv[])
 				screen.apply(row, [] (Window& win) { win.color(2); });
 				--row;
 				screen.apply(row, [] (Window& win) { win.color(3); });
-				central::update(centralWin,table[row]);
+				stream::update(centralWin,table[row]);
 				break;
 
 			case KEY_DOWN:
@@ -60,7 +60,7 @@ int main(int argc, char* argv[])
 				screen.apply(row, [] (Window& win) { win.color(2); });
 				++row;
 				screen.apply(row, [] (Window& win) { win.color(3); });
-				central::update(centralWin,table[row]);
+				stream::update(centralWin,table[row]);
 				break;	
 
 			case 'a':

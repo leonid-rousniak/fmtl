@@ -6,7 +6,7 @@
 #include <sstream>
 #include "Window.h"
 
-namespace central 
+namespace stream
 {
 
 using YahooRow = std::unordered_map<std::string, std::string>;
@@ -15,4 +15,4 @@ std::vector<YahooRow> tokenize(const std::string& str);
 
 void update(Window& centralWin, YahooRow& yahooRow);
 
-} // namespace central
+} // namespace stream
