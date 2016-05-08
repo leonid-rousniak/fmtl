@@ -2,6 +2,7 @@
 #include <iostream>
 #include "Screen.h"
 #include "fmtl.h"
+#include "ascii.h"
 
 
 int main(int argc, char* argv[])
@@ -37,6 +38,7 @@ int main(int argc, char* argv[])
 
 	Window centralWin(25,55,0,25);
 	centralWin.color(1);
+	centralWin.print(0,0,ascii::generator(std::string("AAPL")).c_str());
 
 	uint32_t row = 0;
 	
