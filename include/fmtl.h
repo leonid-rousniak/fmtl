@@ -6,7 +6,7 @@
 #include <sstream>
 #include <curl/curl.h>
 
-/* Generic functions */
+/* curl utility functions */
 namespace fmtl
 {
 
@@ -37,7 +37,7 @@ std::string getUrl(std::vector<std::string> tickers)
 	urlQuery.pop_back();
 
 	// adding info options
-	urlQuery += "&f=sl1c1p2oghjkva2r2rdyj3j1";
+	urlQuery += "&f=snl1c1p2oghjkva2r2rdyj3j1";
 	
 	return urlQuery;
 }

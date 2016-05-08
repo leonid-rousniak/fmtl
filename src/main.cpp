@@ -2,12 +2,12 @@
 #include <iostream>
 #include "Screen.h"
 #include "fmtl.h"
-#include "ascii.h"
+#include "central.h"
 
 
 int main(int argc, char* argv[])
 {
-	/*
+	
 	curl_global_init(CURL_GLOBAL_ALL);	
 	std::ostringstream oss;
 
@@ -18,10 +18,9 @@ int main(int argc, char* argv[])
 		csvStr = oss.str();
 	}
 
-	std::cout << csvStr << std::endl;
-
 	curl_global_cleanup();
-	*/
+
+	std::vector<central::YahooRow> table = central::tokenize(csvStr);
 	
 	uint32_t ch;
 	Screen screen;
@@ -30,15 +29,15 @@ int main(int argc, char* argv[])
 		screen.addWindow(Window(2,25,5*i,0));
 
 	screen.forEach(
-		[] (Window& win) { win.color(2); },
-		[] (Window& win) { win.print(0,0,"Hello Leonid"); },
-		[] (Window& win) { win.print(1,0,"Second line"); });
+		[] (auto& win) { win.color(2); },
+		[] (auto& win) { win.print(0,0,"Hello Leonid"); },
+		[] (auto& win) { win.print(1,0,"Second line"); });
 
 	screen.apply(0, [] (Window& win) { win.color(3); });
 
 	Window centralWin(25,55,0,25);
-	centralWin.color(1);
-	centralWin.print(0,0,ascii::generator(std::string("AAPL")).c_str());
+	centralWin.color(3);
+	central::update(centralWin,table[0]);
 
 	uint32_t row = 0;
 	

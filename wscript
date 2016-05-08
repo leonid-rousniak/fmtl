@@ -7,7 +7,7 @@ top = "."
 out = "build"
 libdep = ["curl", "ncurses"]
 
-wafObjects = ["Window", "Screen"]
+wafObjects = ["Window", "Screen", "central"]
  
 def options(bld):
     bld.load("compiler_cxx")
@@ -32,3 +32,4 @@ def build(bld):
             use = wafObjects, 
             lib = libdep,
             cxxflags=["-std=c++14", "-Wall"])
+

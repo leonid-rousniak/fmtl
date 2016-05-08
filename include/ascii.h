@@ -191,6 +191,73 @@ Art Z = {
 " / /_ ",
 "/____|"};
 
+
+Art Zero = {
+"  __  ",
+" /  \\ ",
+"| () |",
+" \\__/ "};
+
+Art One = {
+" _ ",
+"/ |",
+"| |",
+"|_|"};
+
+Art Two = {
+" ___ ",
+"|_  )",
+" / / ",
+"/___|"};
+
+Art Three = {
+" ____",
+"|__ /",
+" |_ \\",
+"|___/"};
+
+Art Four = {
+" _ _  ",
+"| | | ",
+"|_  _|",
+"  |_| "};
+
+Art Five = {
+" ___ ",
+"| __|",
+"|__ \\",
+"|___/"};
+
+Art Six = {
+"  __ ",
+" / / ",
+"/ _ \\",
+"\\___/"};
+
+Art Seven = {
+" ____ ",
+"|__  |",
+"  / / ",
+" /_/  "};
+
+Art Eight = {
+" ___ ",
+"( _ )",
+"/ _ \\",
+"\\___/"};
+
+Art Nine = {
+" ___ ",
+"/ _ \\",
+"\\_, /",
+" /_/ "};
+
+Art Dot = {
+"   ",
+"   ",
+" _ ",
+"(_)"};
+
 Art convert(char chr)
 {
 	switch(chr) {
@@ -220,12 +287,23 @@ Art convert(char chr)
 		case 'X': return X; break;
 		case 'Y': return Y; break;
 		case 'Z': return Z; break;
+		case '0': return Zero; break;
+		case '1': return One; break;
+		case '2': return Two; break;
+		case '3': return Three; break;
+		case '4': return Four; break;
+		case '5': return Five; break;
+		case '6': return Six; break;
+		case '7': return Seven; break;
+		case '8': return Eight; break;
+		case '9': return Nine; break;
+		case '.': return Dot; break;
 		default: return {"","","","",""};
 	}
 }
 
 
-std::string generator(std::string text)
+std::string generator(const std::string& text)
 {
 	std::vector<Art> word(text.size());
 	for (uint32_t i = 0; i < text.size(); ++i)
