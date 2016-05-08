@@ -24,16 +24,17 @@ int main(int argc, char* argv[])
 	
 	Screen screen;
 
-	for (uint32_t i = 0; i < 5; ++i)
+	for (uint32_t i = 0; i < 2; ++i)
 		screen.addWindow(Window(2,25,2*i,0));
 
 
 	screen.forEach(
-		[] (auto& win) {
-			win.print(0, 0, table["ticker"].c_str());
-			win.print(1, 0, table["time"].c_str()); 
+		[&table] (auto& win) {
+			win.print(0, 0, table[0]["ticker"].c_str());
+			std::string time = table[0]["time"] + " EDT";
+			win.print(1, 0, time.c_str()); 
 		},
-		[] (auto& win) { win.color(2); });
+		[&table] (auto& win) { win.color(2); });
 
 	uint32_t row = 0;
 	screen.apply(row, [] (Window& win) { win.color(3); });

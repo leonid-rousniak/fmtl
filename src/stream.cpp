@@ -4,7 +4,7 @@
 namespace stream
 {
 
-std::vector<YahooRow> tokenize(const std::string& str)
+std::vector<YahooRow> tokenize(std::string str)
 {
 	std::vector<std::string> fields = {
 		"ticker",
@@ -27,6 +27,8 @@ std::vector<YahooRow> tokenize(const std::string& str)
 		"marketCapRT",
 		"marketCap"
 	};		
+
+	str.erase(std::remove(begin(str), end(str), '\"'), end(str));
 	std::stringstream ss(str);
 	std::string row;
 	std::vector<YahooRow> table;

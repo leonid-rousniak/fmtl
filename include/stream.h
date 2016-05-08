@@ -5,13 +5,14 @@
 #include <string>
 #include <sstream>
 #include "Window.h"
+#include <algorithm>
 
 namespace stream
 {
 
 using YahooRow = std::unordered_map<std::string, std::string>;
 
-std::vector<YahooRow> tokenize(const std::string& str);
+std::vector<YahooRow> tokenize(std::string str);
 
 void update(Window& centralWin, YahooRow& yahooRow);
 
