@@ -25,12 +25,12 @@ int main(int argc, char* argv[])
 	Screen screen;
 
 	for (uint32_t i = 0; i < 5; ++i)
-		screen.addWindow(Window(2,25,5*i,0));
+		screen.addWindow(Window(2,25,2*i,0));
 
 	screen.forEach(
-		[] (auto& win) { win.color(2); },
 		[] (auto& win) { win.print(0,0,"Hello Leonid"); },
-		[] (auto& win) { win.print(1,0,"Second line"); });
+		[] (auto& win) { win.print(1,0,"Second line"); },
+		[] (auto& win) { win.color(2); });
 
 	screen.apply(0, [] (Window& win) { win.color(3); });
 
@@ -50,6 +50,7 @@ int main(int argc, char* argv[])
 				screen.apply(row, [] (Window& win) { win.color(2); });
 				--row;
 				screen.apply(row, [] (Window& win) { win.color(3); });
+				central::update(centralWin,table[row]);
 				break;
 
 			case KEY_DOWN:
@@ -59,6 +60,7 @@ int main(int argc, char* argv[])
 				screen.apply(row, [] (Window& win) { win.color(2); });
 				++row;
 				screen.apply(row, [] (Window& win) { win.color(3); });
+				central::update(centralWin,table[row]);
 				break;	
 
 			case 'a':
@@ -67,8 +69,8 @@ int main(int argc, char* argv[])
 					win.color(2);
 					win.print(1,0,"Updated!"); 
 				});
+				screen.apply(row, [] (Window& win) { win.color(3); });
 				break;
-
 		}
 	}
 	
