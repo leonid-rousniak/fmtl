@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Window.h"
+
 namespace lambda 
 {
 
@@ -11,6 +13,11 @@ auto List(Fs... fs) {
 		(void)swallow{0,
 			(void(fs(args...)), 0)...};
 	};
+}
+
+inline auto color(uint32_t nb)
+{
+	return [=] (Window& win) { win.color(nb); };
 }
 
 } // namespace lambda
