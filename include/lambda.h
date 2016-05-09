@@ -1,7 +1,7 @@
 #pragma once
 
 #include <tuple>
-#include <functional>
+#include <array>
 #include "Window.h"
 
 namespace compiletime
@@ -29,6 +29,12 @@ auto List(Fs... fs) {
 	};
 }
 
+template <typename Input, typename Function, typename T>
+void for_each(Input& input, Function f, const T& param)
+{
+	static_assert(input.size() == param.size(), "Containers must have the same size!");
+	
+}
 
 inline auto color(uint32_t nb)
 {
