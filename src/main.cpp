@@ -37,7 +37,6 @@ int main(int argc, char* argv[])
 		[&table] (auto& win) { win.color(2); });
 
 	uint32_t row = 0;
-	//screen.apply(row, [] (Window& win) { win.color(3); });
 	screen.apply(row, lambda::color(3)); 
 
 	Window centralWin(25,55,0,25);
