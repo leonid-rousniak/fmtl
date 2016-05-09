@@ -35,7 +35,7 @@ class Generator
 {
 public:
 	Generator() = delete;
-    Generator(Function& f, const Args&... args) : _function(f), _args(std::make_tuple((args)...)) {}
+    Generator(const Function& f, const Args&... args) : _function(f), _args(std::make_tuple((args)...)) {}
     Generator(Function&& f, Args&&... args) : _function(f), _args(std::make_tuple(std::forward<Args>(args)...)) {}
      
     template <typename... Ts, std::size_t... Is>
@@ -58,7 +58,7 @@ private:
 };
 
 template <typename Function, typename... Args>
-Generator<Function,Args...> make_generator(Function& f, const Args&... args)
+Generator<Function,Args...> make_generator(const Function& f, const Args&... args)
 {
     return Generator<Function,Args...>(f, (args)...);
 }
