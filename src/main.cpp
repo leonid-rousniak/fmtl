@@ -4,10 +4,18 @@
 #include "fmtl.h"
 #include "stream.h"
 
+void foo(int x, float y, double z)
+{
+	std::cout << x + y + z << std::endl;
+}
 
 int main(int argc, char* argv[])
 {
-	
+	auto generator = lambda::make_generator([] (int a, int b) { std::cout << a + b << std::endl; }, 3, 7);
+	auto generator2 = lambda::make_generator(foo, 3,7,8);
+	generator.call();
+	generator2.call();
+
 	curl_global_init(CURL_GLOBAL_ALL);	
 	std::ostringstream oss;
 
