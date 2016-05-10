@@ -4,18 +4,6 @@
 #include <array>
 #include "Window.h"
 
-namespace compiletime
-{
-    template <std::size_t... Ts>
-    struct index {};
-    
-    template <std::size_t N, std::size_t... Ts>
-    struct sequence: sequence<N - 1, N - 1, Ts...> {};
-    
-    template <std::size_t... Ts>
-    struct sequence<0, Ts...> : index<Ts...> {};
-}
-
 namespace lambda 
 {
 
@@ -39,15 +27,16 @@ public:
     Generator(Function&& f, Args&&... args) : _function(f), _args(std::make_tuple(std::forward<Args>(args)...)) {}
      
     template <typename... Ts, std::size_t... Is>
-    void caller(std::tuple<Ts...>& tup, compiletime::index<Is...>)
+    void caller(std::tuple<Ts...>& tup, std::index_sequence<Is...>)
     {
         _function(std::get<Is>(tup)...);
     }
      
-    template <typename... Ts>
-    void caller(std::tuple<Ts...>& tup)
+    template <typename Tup>
+    void caller(Tup& tup)
     {
-        caller(tup, compiletime::sequence<sizeof...(Ts)>{});
+		constexpr auto Size = std::tuple_size<typename std::decay<Tup>::type>::value;
+        caller(tup, std::make_index_sequence<Size>{});
     }
      
     void call() { caller(_args); }
