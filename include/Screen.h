@@ -17,7 +17,7 @@ public:
 	template <typename... Fs>
 	void forEach(Fs... fs)
 	{
-		std::for_each(begin(_windows), end(_windows), lambda::List(fs...));
+		std::for_each(begin(_windows), end(_windows), lambda::Chain(fs...));
 		refresh();
 	}
 
@@ -25,7 +25,7 @@ public:
 	void apply(uint32_t row, Fs... fs)
 	{
 		if (row >= 0 and row < size()) {
-			lambda::List(fs...)(_windows[row]);
+			lambda::Chain(fs...)(_windows[row]);
 			refresh();
 		}
 	}

@@ -9,12 +9,20 @@ void foo(int x, float y, double z)
 	std::cout << x + y + z << std::endl;
 }
 
+void foo2(int& a, int b) { a+=b; }
+
 int main(int argc, char* argv[])
 {
 	auto generator = lambda::make_generator([] (int a, int b) { std::cout << a + b << std::endl; }, 3, 7);
 	auto generator2 = lambda::make_generator(foo, 3,7,8);
-	generator.call();
-	generator2.call();
+	generator.yield();
+	generator2.yield();
+
+	auto data = lambda::list(2,3,"leonid");
+	lambda::print(data);
+	//auto data = lambda::list_leonid('f',3.5,1,3.0);
+	//lambda::print(data);
+	//lambda::DataList<int, const char*>(1,"lalala");	
 
 	curl_global_init(CURL_GLOBAL_ALL);	
 	std::ostringstream oss;

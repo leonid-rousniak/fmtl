@@ -1,22 +1,20 @@
 #pragma once
 
-#include <tuple>
-#include <array>
 #include "Window.h"
+#include "list.h"
 
 namespace lambda 
 {
 
 /* lambdaList is a facilty to use void lambdas sequentially */
 template <typename... Fs>
-auto List(Fs... fs) { 
+auto Chain(Fs... fs) { 
     using swallow = int [];
     return [=](auto&... args) {
 		(void)swallow{0,
 			(void(fs(args...)), 0)...};
 	};
 }
-
 
 template <typename Function, typename... Args>
 class Generator
@@ -39,7 +37,7 @@ public:
         caller(tup, std::make_index_sequence<Size>{});
     }
      
-    void call() { caller(_args); }
+    void yield() { std::experimental::apply(_function, _args); }
 
 private:
     Function _function;
