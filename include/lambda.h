@@ -16,6 +16,24 @@ auto Chain(Fs... fs) {
 	};
 }
 
+/* Facility to convert functions to lambdas */
+template <typename Function>
+struct Convertor {
+    Convertor(Function f) : _f(f) {}
+    template <typename... Xs>
+    auto operator() (Xs... xs) {
+        return _f(xs...);
+    }
+    Function _f;
+};
+
+/* Helper function because initializing Convertor is impossible */
+template <typename Function>
+Convertor<Function> toLambda(Function f)
+{
+    return Convertor<Function>(f);
+}
+
 template <typename Function, typename... Args>
 class Generator
 {
