@@ -33,16 +33,3 @@ private:
 	vec2d _size;
 	vec2d _pos;
 };
-
-namespace window 
-{
-
-struct Colorator {
-	void operator() (Window& win) {
-		win.color(3);
-	}
-};
-
-//Colorator color(uint32_t col) { Colorator(col) colorator; return colorator; }
-
-} // namespace window

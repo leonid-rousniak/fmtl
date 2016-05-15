@@ -5,7 +5,6 @@
 #include <fstream>
 #include <sstream>
 #include <algorithm>
-#include <list>
 #include <unordered_map>
 #include <curl/curl.h>
 #include "Window.h"
@@ -31,7 +30,7 @@ inline static size_t data_write(void* buf, size_t size, size_t nmemb, void* user
 	return 0;
 }
 
-inline std::string getUrl(std::list<std::string> tickers)
+inline std::string getUrl(std::vector<std::string> tickers)
 {
 	std::string urlQuery = "http://download.finance.yahoo.com/d/quotes.csv?";
 	
@@ -66,7 +65,7 @@ inline CURLcode curl_read(const std::string& url, std::ostream& os)
 	return code;
 }
 
-inline std::string retrieveData(std::list<std::string> tickers)
+inline std::string retrieveData(std::vector<std::string> tickers)
 {
 	curl_global_init(CURL_GLOBAL_ALL);	
 	std::stringstream ss;
@@ -106,6 +105,19 @@ inline std::vector<std::string> retrieveNews()
 	return newsFeed;
 }
 
+inline void newsFeed()
+{
+	std::vector<std::string> newsFeed = fmtl::retrieveNews(); 
+	Window newsBar(1,80,22,0);
+	newsBar.color(1);
+	while (1) {
+		for (const auto& feed : newsFeed) {
+			newsBar.clear();
+			newsBar.print(0,0,feed.c_str());
+			std::this_thread::sleep_for(std::chrono::seconds(5));
+		}
+	}
+}
 
 using YahooRow = std::unordered_map<std::string, std::string>;
 using Table = std::vector<YahooRow>;

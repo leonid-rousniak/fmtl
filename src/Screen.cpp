@@ -1,7 +1,7 @@
 #include "Screen.h"
 #include "ascii.h"
 
-Screen::Screen(const std::list<std::string>& tickers)
+Screen::Screen(const std::vector<std::string>& tickers)
 	: _dataTable(std::make_unique<fmtl::Table>()),
 	  _tickers(tickers)
 {
@@ -30,28 +30,11 @@ Screen::Screen(const std::list<std::string>& tickers)
 	Window::vec2d currentSize = getScreenSize();
 	_commandLine = Window(1,80,currentSize.first-1,0);
 	_commandLine.color(2);
-
-	_newsBar = Window(1,80, currentSize.first-2,0);
-	_newsBar.color(1);
-	std::thread t(&Screen::newsFeed, this);
-	t.detach();
 }
 
 Screen::~Screen()
 {
  	endwin();
-}
-
-void Screen::newsFeed()
-{
-	std::vector<std::string> newsFeed = fmtl::retrieveNews(); 
-	while (1) {
-		for (const auto& feed : newsFeed) {
-			_newsBar.clear();
-			_newsBar.print(0,0,feed.c_str());
-			std::this_thread::sleep_for(std::chrono::seconds(5));
-		}
-	}
 }
 
 void Screen::update()
@@ -63,10 +46,12 @@ void Screen::update()
 	for (uint32_t i = 0; i < _tickers.size(); ++i) {
 		addWindow(Window(2,25,2*i,0));
 		_windows[i].print(0, 0, getInfo(i,"ticker").c_str());
-		_windows[i].print(1, 0, (getInfo(i,"time") + std::string(" EDT")).c_str()); 
+		_windows[i].print(1, 0, getInfo(i,"time").c_str()); 
+		_windows[i].color(2);
 	}
 	_windows[_activeRow].color(3);
 }
+
 
 void Screen::refreshCentral(uint32_t index)
 {
@@ -131,6 +116,39 @@ void Screen::insert()
 				break;
 		}
 	}
+	auto position = begin(_tickers) + _activeRow;
+	_tickers.insert(position,ticker);
 	_commandLine.clear();
 	_commandLine.refresh();
+	_windows.clear();
+	update();
+}
+
+void Screen::refreshWindows()
+{
+	refreshCentral(_activeRow);
+	
+	// Add all the windows on the left side
+	for (uint32_t i = 0; i < _tickers.size(); ++i) {
+		addWindow(Window(2,25,2*i,0));
+		_windows[i].print(0, 0, getInfo(i,"ticker").c_str());
+		_windows[i].print(1, 0, getInfo(i,"time").c_str()); 
+		_windows[i].color(2);
+	}
+	_windows[_activeRow].color(3);
+}
+
+void Screen::remove()
+{
+	if (_activeRow == 0 and _windows.size() == 1)
+		return;
+	auto postick = begin(_tickers) + _activeRow - 1;
+	_tickers.erase(postick);
+	if (_activeRow == _tickers.size()) {
+		_windows[_activeRow].color(2);
+		--_activeRow;
+	}
+	_windows.clear();
+	refresh();
+	refreshWindows();
 }

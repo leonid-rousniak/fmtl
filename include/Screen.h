@@ -4,7 +4,6 @@
 #include <vector>
 #include <algorithm>
 #include <memory>
-#include <list>
 #include <chrono>
 #include <thread>
 #include "Window.h"
@@ -14,16 +13,18 @@ class Screen
 {
 public:
 	Screen() = delete;
-	Screen(const std::list<std::string>& tickers);
+	Screen(const std::vector<std::string>& tickers);
 	~Screen();
 	void addWindow(Window&& window) { _windows.push_back(window); }
 	size_t size() { return _windows.size(); }
 	void update();
+	void refreshWindows();
 	void refreshCentral(uint32_t index);
 	void newsFeed();
 	std::string getInfo(uint32_t index, std::string tag) { return (*_dataTable)[index][tag]; }
 	Window::vec2d getScreenSize();
 	void insert();
+	void remove();
 	void moveUp();
 	void moveDown();
 
@@ -47,6 +48,6 @@ private:
 	Window _newsBar;
 	std::vector<Window> _windows;
 	std::unique_ptr<fmtl::Table> _dataTable;
-	std::list<std::string> _tickers; // using list for efficient insertion/deletion
+	std::vector<std::string> _tickers;
 	uint32_t _activeRow = 0;
 };

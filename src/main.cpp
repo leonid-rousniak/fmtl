@@ -7,9 +7,11 @@
 int main(int argc, char* argv[])
 {
 
-	std::list<std::string> tickers = {"F", "AAPL", "GOOG", "MSFT"};
+	std::vector<std::string> tickers = {"F", "AAPL", "GOOG", "MSFT"};
 	Screen screen(tickers);
 	screen.update();
+
+	std::thread t(fmtl::newsFeed);
 
 	int ch;
 	while((ch = getch()) != KEY_BACKSPACE) {	
@@ -30,8 +32,12 @@ int main(int argc, char* argv[])
 			case 'i':
 				screen.insert();
 				break;
+
+			case 'd':
+				screen.remove();
+				break;
 		}
 	}
-	
+	t.join();	
 	return 0;
 }
