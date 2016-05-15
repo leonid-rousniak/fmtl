@@ -5,7 +5,7 @@ VERSION = "0.1"
  
 top = "."
 out = "build"
-libdep = ["curl", "ncurses"]
+libdep = ["curl", "ncurses", "pthread"]
 
 wafObjects = ["Window", "Screen"]
  

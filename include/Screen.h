@@ -4,23 +4,28 @@
 #include <vector>
 #include <algorithm>
 #include <memory>
+#include <list>
+#include <chrono>
+#include <thread>
 #include "Window.h"
 #include "fmtl.h"
 
 class Screen 
 {
 public:
-	Screen();
+	Screen() = delete;
+	Screen(const std::list<std::string>& tickers);
 	~Screen();
 	void addWindow(Window&& window) { _windows.push_back(window); }
 	size_t size() { return _windows.size(); }
-	void setDataStream(const fmtl::Table& table);
+	void update();
 	void refreshCentral(uint32_t index);
+	void newsFeed();
 	std::string getInfo(uint32_t index, std::string tag) { return (*_dataTable)[index][tag]; }
-	void update(const fmtl::Table& table);
 	Window::vec2d getScreenSize();
-	void insert(uint32_t row);
-
+	void insert();
+	void moveUp();
+	void moveDown();
 
 	void forEach(auto f)
 	{
@@ -39,6 +44,9 @@ public:
 private:
 	Window _centralWindow;
 	Window _commandLine;
+	Window _newsBar;
 	std::vector<Window> _windows;
 	std::unique_ptr<fmtl::Table> _dataTable;
+	std::list<std::string> _tickers; // using list for efficient insertion/deletion
+	uint32_t _activeRow = 0;
 };

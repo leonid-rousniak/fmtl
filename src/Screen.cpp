@@ -1,7 +1,9 @@
 #include "Screen.h"
 #include "ascii.h"
 
-Screen::Screen() : _dataTable(std::make_unique<fmtl::Table>())
+Screen::Screen(const std::list<std::string>& tickers)
+	: _dataTable(std::make_unique<fmtl::Table>()),
+	  _tickers(tickers)
 {
 	initscr();
 	cbreak();
@@ -22,12 +24,17 @@ Screen::Screen() : _dataTable(std::make_unique<fmtl::Table>())
 	init_pair(2,COLOR_WHITE,COLOR_BLACK);
 	init_pair(3,COLOR_BLUE,COLOR_WHITE);
 
-	_centralWindow = Window(23,55,0,25);
+	_centralWindow = Window(22,55,0,25);
 	_centralWindow.color(3);
 
 	Window::vec2d currentSize = getScreenSize();
 	_commandLine = Window(1,80,currentSize.first-1,0);
-	_commandLine.color(1);
+	_commandLine.color(2);
+
+	_newsBar = Window(1,80, currentSize.first-2,0);
+	_newsBar.color(1);
+	std::thread t(&Screen::newsFeed, this);
+	t.detach();
 }
 
 Screen::~Screen()
@@ -35,17 +42,31 @@ Screen::~Screen()
  	endwin();
 }
 
-void Screen::setDataStream(const fmtl::Table& table)
+void Screen::newsFeed()
 {
-	*_dataTable = table;
-	refreshCentral(0);
+	std::string news = "FEED";
+	while (1) {
+		_newsBar.print(0,0,news.c_str());
+		std::this_thread::sleep_for(std::chrono::seconds(5));
+		if (news == "FEED")
+			news = "BACK";
+		else
+			news = "FEED";
+	}
+}
+
+void Screen::update()
+{
+	*_dataTable = fmtl::tokenize(fmtl::retrieveData(_tickers));
+	refreshCentral(_activeRow);
 	
 	// Add all the windows on the left side
-	for (uint32_t i = 0; i < table.size(); ++i) {
+	for (uint32_t i = 0; i < _tickers.size(); ++i) {
 		addWindow(Window(2,25,2*i,0));
 		_windows[i].print(0, 0, getInfo(i,"ticker").c_str());
 		_windows[i].print(1, 0, (getInfo(i,"time") + std::string(" EDT")).c_str()); 
 	}
+	_windows[_activeRow].color(3);
 }
 
 void Screen::refreshCentral(uint32_t index)
@@ -57,6 +78,26 @@ void Screen::refreshCentral(uint32_t index)
 	_centralWindow.print(11,0,"avg volume:");
 	_centralWindow.print(11,15,getInfo(index,"avgVolume").c_str());
 }
+
+void Screen::moveUp()
+{
+	if (_activeRow != 0) {
+		apply([] (Window& win) { win.color(2); }, _activeRow);
+		--_activeRow;
+		apply([] (Window& win) { win.color(3); }, _activeRow);
+		refreshCentral(_activeRow);
+	}
+}
+
+void Screen::moveDown()
+{
+	if (_activeRow < _tickers.size()-1) {
+		apply([] (Window& win) { win.color(2); }, _activeRow);
+		++_activeRow;
+		apply([] (Window& win) { win.color(3); }, _activeRow);
+		refreshCentral(_activeRow);
+	}
+}
 	
 Window::vec2d Screen::getScreenSize()
 {
@@ -65,7 +106,7 @@ Window::vec2d Screen::getScreenSize()
 	return std::make_pair(row,col); 
 }
 
-void Screen::insert(uint32_t index)
+void Screen::insert()
 {
 	std::string message("Insert ticker:");
 	_commandLine.print(0,0,message.c_str());

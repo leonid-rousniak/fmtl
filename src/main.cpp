@@ -7,54 +7,28 @@
 int main(int argc, char* argv[])
 {
 
-	std::vector<std::string> tickers = {"F", "AAPL", "GOOG", "MSFT"};
-	Screen screen;
-
-	screen.setDataStream(fmtl::tokenize(fmtl::retrieveData(tickers)));
-
-	uint32_t row = 0;
-	screen.apply([] (auto& win) { win.color(3); }, row);
-
+	std::list<std::string> tickers = {"F", "AAPL", "GOOG", "MSFT"};
+	Screen screen(tickers);
+	screen.update();
 
 	int ch;
 	while((ch = getch()) != KEY_BACKSPACE) {	
 		switch(ch)
 		{	
 			case KEY_UP:
-				if (row == 0)
-					break;
-
-				screen.apply([] (Window& win) { win.color(2); }, row);
-				--row;
-				screen.apply([] (Window& win) { win.color(3); }, row);
-				screen.refreshCentral(row);
+				screen.moveUp();
 				break;
 
 			case KEY_DOWN:
-				if (row >= screen.size()-1) 
-					break;
-
-				screen.apply([] (Window& win) { win.color(2); }, row);
-				++row;
-				screen.apply([] (Window& win) { win.color(3); }, row);
-				screen.refreshCentral(row);
+				screen.moveDown();
 				break;	
 			
 			case 'r':
-				//screen.update(fmtl::tokenize(fmtl::retrieveData(tickers)));
+				screen.update();
 				break;
 
 			case 'i':
-				screen.insert(row);
-				break;
-
-			case 'a':
-				screen.forEach([] (Window& win) {
-					win.clear();
-					win.color(2);
-					win.print(1,0,"Updated!"); 
-				});
-				screen.apply([] (Window& win) { win.color(3); }, row);
+				screen.insert();
 				break;
 		}
 	}
