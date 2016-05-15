@@ -23,7 +23,7 @@ def build(bld):
                 target = wobj, 
                 includes=["include"],
                 lib = libdep,
-                cxxflags=["-std=c++17", "-g", "-Wall"])
+                cxxflags=["-std=c++14", "-g", "-Wall"])
 
     bld.program(
             source="src/main.cpp", 
