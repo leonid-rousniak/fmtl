@@ -23,6 +23,7 @@ public:
 	void color(uint32_t pairNumber) { wbkgd(_window ,COLOR_PAIR(pairNumber)); wrefresh(_window); }
 	void print(uint32_t y, uint32_t x, const char* text) { mvwprintw(_window, y, x, text); wrefresh(_window); }
 	void clear() { wclear(_window); }
+	void refresh() { wrefresh(_window); }
 	vec2d size() const { return _size; }
 	vec2d pos() const { return _pos; }
 	void move(uint32_t y, uint32_t x); 

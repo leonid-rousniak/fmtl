@@ -3,31 +3,20 @@
 #include "Screen.h"
 #include "fmtl.h"
 
-void foo2(int a) { std::cout << a << std::endl; }
 
 int main(int argc, char* argv[])
 {
-	curl_global_init(CURL_GLOBAL_ALL);	
-	std::ostringstream oss;
 
-	std::string csvStr;
-	std::vector<std::string> tickers = {"AAPL", "GOOG", "MSFT"};
-	std::string url = fmtl::getUrl(tickers);
-	if (CURLE_OK == fmtl::curl_read(url, oss)) {
-		csvStr = oss.str();
-	}
-
-	curl_global_cleanup();
-
+	std::vector<std::string> tickers = {"F", "AAPL", "GOOG", "MSFT"};
 	Screen screen;
 
-	screen.setDataStream(fmtl::tokenize(csvStr));
+	screen.setDataStream(fmtl::tokenize(fmtl::retrieveData(tickers)));
 
 	uint32_t row = 0;
 	screen.apply([] (auto& win) { win.color(3); }, row);
 
 
-	uint32_t ch;
+	int ch;
 	while((ch = getch()) != KEY_BACKSPACE) {	
 		switch(ch)
 		{	
@@ -50,6 +39,14 @@ int main(int argc, char* argv[])
 				screen.apply([] (Window& win) { win.color(3); }, row);
 				screen.refreshCentral(row);
 				break;	
+			
+			case 'r':
+				//screen.update(fmtl::tokenize(fmtl::retrieveData(tickers)));
+				break;
+
+			case 'i':
+				screen.insert(row);
+				break;
 
 			case 'a':
 				screen.forEach([] (Window& win) {

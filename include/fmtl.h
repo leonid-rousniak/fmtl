@@ -65,6 +65,21 @@ inline CURLcode curl_read(const std::string& url, std::ostream& os)
 	return code;
 }
 
+inline std::string retrieveData(std::vector<std::string> tickers)
+{
+	curl_global_init(CURL_GLOBAL_ALL);	
+	std::ostringstream oss;
+
+	std::string csvStr;
+	std::string url = fmtl::getUrl(tickers);
+	if (CURLE_OK == fmtl::curl_read(url, oss)) {
+		csvStr = oss.str();
+	}
+
+	curl_global_cleanup();
+	return csvStr;
+}
+
 using YahooRow = std::unordered_map<std::string, std::string>;
 using Table = std::vector<YahooRow>;
 

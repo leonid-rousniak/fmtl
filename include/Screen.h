@@ -17,6 +17,10 @@ public:
 	void setDataStream(const fmtl::Table& table);
 	void refreshCentral(uint32_t index);
 	std::string getInfo(uint32_t index, std::string tag) { return (*_dataTable)[index][tag]; }
+	void update(const fmtl::Table& table);
+	Window::vec2d getScreenSize();
+	void insert(uint32_t row);
+
 
 	void forEach(auto f)
 	{
@@ -34,6 +38,7 @@ public:
 
 private:
 	Window _centralWindow;
+	Window _commandLine;
 	std::vector<Window> _windows;
 	std::unique_ptr<fmtl::Table> _dataTable;
 };
