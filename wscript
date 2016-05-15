@@ -7,7 +7,7 @@ top = "."
 out = "build"
 libdep = ["curl", "ncurses"]
 
-wafObjects = ["Window", "Screen", "stream"]
+wafObjects = ["Window", "Screen"]
  
 def options(bld):
     bld.load("compiler_cxx")

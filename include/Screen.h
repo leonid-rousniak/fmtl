@@ -3,33 +3,37 @@
 #include <ncurses.h>
 #include <vector>
 #include <algorithm>
+#include <memory>
 #include "Window.h"
-#include "lambda.h"
+#include "fmtl.h"
 
 class Screen 
 {
 public:
 	Screen();
 	~Screen();
-	inline void addWindow(Window&& window) { _windows.push_back(window); }
-	inline size_t size() { return _windows.size(); }
+	void addWindow(Window&& window) { _windows.push_back(window); }
+	size_t size() { return _windows.size(); }
+	void setDataStream(const fmtl::Table& table);
+	void refreshCentral(uint32_t index);
+	std::string getInfo(uint32_t index, std::string tag) { return (*_dataTable)[index][tag]; }
 
-	template <typename... Fs>
-	void forEach(Fs... fs)
+	void forEach(auto f)
 	{
-		std::for_each(begin(_windows), end(_windows), lambda::Chain(fs...));
+		std::for_each(begin(_windows), end(_windows), f);
 		refresh();
 	}
 
-	template <typename... Fs>
-	void apply(uint32_t row, Fs... fs)
+	void apply(auto f, uint32_t row)
 	{
 		if (row >= 0 and row < size()) {
-			lambda::Chain(fs...)(_windows[row]);
+			f(_windows[row]);
 			refresh();
 		}
 	}
 
 private:
+	Window _centralWindow;
 	std::vector<Window> _windows;
+	std::unique_ptr<fmtl::Table> _dataTable;
 };
