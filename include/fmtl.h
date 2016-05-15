@@ -69,17 +69,43 @@ inline CURLcode curl_read(const std::string& url, std::ostream& os)
 inline std::string retrieveData(std::list<std::string> tickers)
 {
 	curl_global_init(CURL_GLOBAL_ALL);	
-	std::ostringstream oss;
+	std::stringstream ss;
 
 	std::string csvStr;
-	std::string url = fmtl::getUrl(tickers);
-	if (CURLE_OK == fmtl::curl_read(url, oss)) {
-		csvStr = oss.str();
+	std::string url = getUrl(tickers);
+	if (CURLE_OK == curl_read(url, ss)) {
+		csvStr = ss.str();
 	}
 
 	curl_global_cleanup();
 	return csvStr;
 }
+
+inline std::vector<std::string> retrieveNews()
+{
+	curl_global_init(CURL_GLOBAL_ALL);	
+	std::stringstream ss;
+
+	auto handle = curl_read("http://finance.yahoo.com/rss/topfinstories", ss);
+	if (handle != CURLE_OK)
+		ss << "Error in getting the news feed";
+
+	curl_global_cleanup();
+
+	std::vector<std::string> newsFeed;
+	std::string line;
+	while (std::getline(ss, line)) {
+		if (line.find("title") != std::string::npos) {
+			auto start = line.find(">");
+			auto finish = line.substr(start+1).find("<");
+			line = line.substr(start+1,finish);
+			newsFeed.push_back(line);
+		}
+	}
+	newsFeed.erase(begin(newsFeed),begin(newsFeed)+2);
+	return newsFeed;
+}
+
 
 using YahooRow = std::unordered_map<std::string, std::string>;
 using Table = std::vector<YahooRow>;

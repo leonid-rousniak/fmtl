@@ -44,14 +44,13 @@ Screen::~Screen()
 
 void Screen::newsFeed()
 {
-	std::string news = "FEED";
+	std::vector<std::string> newsFeed = fmtl::retrieveNews(); 
 	while (1) {
-		_newsBar.print(0,0,news.c_str());
-		std::this_thread::sleep_for(std::chrono::seconds(5));
-		if (news == "FEED")
-			news = "BACK";
-		else
-			news = "FEED";
+		for (const auto& feed : newsFeed) {
+			_newsBar.clear();
+			_newsBar.print(0,0,feed.c_str());
+			std::this_thread::sleep_for(std::chrono::seconds(5));
+		}
 	}
 }
 
