@@ -109,7 +109,7 @@ inline void newsFeed()
 {
 	std::vector<std::string> newsFeed = fmtl::retrieveNews(); 
 	Window newsBar(1,80,22,0);
-	newsBar.color(1);
+	newsBar.color(4);
 	while (1) {
 		for (const auto& feed : newsFeed) {
 			newsBar.clear();

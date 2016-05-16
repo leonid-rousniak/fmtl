@@ -18,14 +18,14 @@ Screen::Screen(const std::vector<std::string>& tickers)
 		std::cout << "Your terminal does not support color" << std::endl;
 		exit(1);
 	}
-
 	start_color();
 	init_pair(1,COLOR_BLUE,COLOR_YELLOW);
 	init_pair(2,COLOR_WHITE,COLOR_BLACK);
 	init_pair(3,COLOR_BLUE,COLOR_WHITE);
+	init_pair(4,COLOR_BLACK,COLOR_WHITE);
 
 	_centralWindow = Window(22,55,0,25);
-	_centralWindow.color(3);
+	_centralWindow.color(2);
 
 	Window::vec2d currentSize = getScreenSize();
 	_commandLine = Window(1,80,currentSize.first-1,0);
@@ -37,9 +37,10 @@ Screen::~Screen()
  	endwin();
 }
 
-void Screen::update()
+void Screen::update(bool updateData)
 {
-	*_dataTable = fmtl::tokenize(fmtl::retrieveData(_tickers));
+	if (updateData)
+		*_dataTable = fmtl::tokenize(fmtl::retrieveData(_tickers));
 	refreshCentral(_activeRow);
 	
 	// Add all the windows on the left side
@@ -49,7 +50,7 @@ void Screen::update()
 		_windows[i].print(1, 0, getInfo(i,"time").c_str()); 
 		_windows[i].color(2);
 	}
-	_windows[_activeRow].color(3);
+	_windows[_activeRow].color(4);
 }
 
 
@@ -68,7 +69,7 @@ void Screen::moveUp()
 	if (_activeRow != 0) {
 		apply([] (Window& win) { win.color(2); }, _activeRow);
 		--_activeRow;
-		apply([] (Window& win) { win.color(3); }, _activeRow);
+		apply([] (Window& win) { win.color(4); }, _activeRow);
 		refreshCentral(_activeRow);
 	}
 }
@@ -78,7 +79,7 @@ void Screen::moveDown()
 	if (_activeRow < _tickers.size()-1) {
 		apply([] (Window& win) { win.color(2); }, _activeRow);
 		++_activeRow;
-		apply([] (Window& win) { win.color(3); }, _activeRow);
+		apply([] (Window& win) { win.color(4); }, _activeRow);
 		refreshCentral(_activeRow);
 	}
 }
@@ -124,31 +125,19 @@ void Screen::insert()
 	update();
 }
 
-void Screen::refreshWindows()
-{
-	refreshCentral(_activeRow);
-	
-	// Add all the windows on the left side
-	for (uint32_t i = 0; i < _tickers.size(); ++i) {
-		addWindow(Window(2,25,2*i,0));
-		_windows[i].print(0, 0, getInfo(i,"ticker").c_str());
-		_windows[i].print(1, 0, getInfo(i,"time").c_str()); 
-		_windows[i].color(2);
-	}
-	_windows[_activeRow].color(3);
-}
 
 void Screen::remove()
 {
-	if (_activeRow == 0 and _windows.size() == 1)
+	if (_activeRow == 0 and _tickers.size() == 1)
 		return;
-	auto postick = begin(_tickers) + _activeRow - 1;
-	_tickers.erase(postick);
+	auto posTick = begin(_tickers) + _activeRow;
+	_tickers.erase(posTick);
+	auto posTable = begin(*_dataTable) + _activeRow;
+	(*_dataTable).erase(posTable);
 	if (_activeRow == _tickers.size()) {
 		_windows[_activeRow].color(2);
 		--_activeRow;
 	}
 	_windows.clear();
-	refresh();
-	refreshWindows();
+	update(false);
 }

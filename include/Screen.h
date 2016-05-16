@@ -17,7 +17,7 @@ public:
 	~Screen();
 	void addWindow(Window&& window) { _windows.push_back(window); }
 	size_t size() { return _windows.size(); }
-	void update();
+	void update(bool updateData = true);
 	void refreshWindows();
 	void refreshCentral(uint32_t index);
 	void newsFeed();

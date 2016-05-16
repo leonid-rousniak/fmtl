@@ -6,7 +6,6 @@
 
 int main(int argc, char* argv[])
 {
-
 	std::vector<std::string> tickers = {"F", "AAPL", "GOOG", "MSFT"};
 	Screen screen(tickers);
 	screen.update();
@@ -38,6 +37,6 @@ int main(int argc, char* argv[])
 				break;
 		}
 	}
-	t.join();	
+	t.join();
 	return 0;
 }
