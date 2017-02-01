@@ -30,7 +30,7 @@ Window& Window::operator= (const Window& other)
     }
 
 	else 
-		std::cout << "Self-assignment !!?" << std::endl;
+		throw std::runtime_error("Self-assignement is not allowed.");
 
     return *this;
 }

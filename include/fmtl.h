@@ -10,8 +10,7 @@
 #include "Window.h"
 
 /* utility functions for the program*/
-namespace fmtl
-{
+namespace fmtl {
 
 /* 
  * callback function writes data to a std::ostream,
@@ -19,8 +18,7 @@ namespace fmtl
  */
 inline static size_t data_write(void* buf, size_t size, size_t nmemb, void* userp)
 {
-	if(userp)
-	{
+	if (userp) {
 		std::ostream& os = *static_cast<std::ostream*>(userp);
 		std::streamsize len = size * nmemb;
 		if(os.write(static_cast<char*>(buf), len))
@@ -50,8 +48,7 @@ inline CURLcode curl_read(const std::string& url, std::ostream& os)
 	CURLcode code(CURLE_FAILED_INIT);
 	CURL* curl = curl_easy_init();
 
-	if (curl)
-	{
+	if (curl) {
 		if (CURLE_OK == (code = curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, &data_write))
 		&& CURLE_OK == (code = curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 1L))
 		&& CURLE_OK == (code = curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L))
@@ -85,7 +82,7 @@ inline std::vector<std::string> retrieveNews()
 	curl_global_init(CURL_GLOBAL_ALL);	
 	std::stringstream ss;
 
-	auto handle = curl_read("http://finance.yahoo.com/rss/topfinstories", ss);
+	const auto handle = curl_read("http://finance.yahoo.com/rss/topfinstories", ss);
 	if (handle != CURLE_OK)
 		ss << "Error in getting the news feed";
 
@@ -107,7 +104,7 @@ inline std::vector<std::string> retrieveNews()
 
 inline void newsFeed()
 {
-	std::vector<std::string> newsFeed = fmtl::retrieveNews(); 
+	const std::vector<std::string> newsFeed = fmtl::retrieveNews(); 
 	Window newsBar(1,80,22,0);
 	newsBar.color(4);
 	while (1) {
@@ -124,7 +121,7 @@ using Table = std::vector<YahooRow>;
 
 inline Table tokenize(std::string str)
 {
-	std::vector<std::string> fields = {
+	const std::vector<std::string> fields = {
 		"ticker",
 		"time",
 		"name",

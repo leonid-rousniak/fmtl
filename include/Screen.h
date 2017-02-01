@@ -16,13 +16,13 @@ public:
 	Screen(const std::vector<std::string>& tickers);
 	~Screen();
 	void addWindow(Window&& window) { _windows.push_back(window); }
-	size_t size() { return _windows.size(); }
+	size_t size() const { return _windows.size(); }
 	void update(bool updateData = true);
 	void refreshWindows();
 	void refreshCentral(uint32_t index);
 	void newsFeed();
-	std::string getInfo(uint32_t index, std::string tag) { return (*_dataTable)[index][tag]; }
-	Window::vec2d getScreenSize();
+	std::string getInfo(uint32_t index, std::string tag) const { return (*_dataTable)[index][tag]; }
+	Window::vec2d getScreenSize() const;
 	void insert();
 	void remove();
 	void moveUp();

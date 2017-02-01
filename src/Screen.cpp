@@ -84,7 +84,7 @@ void Screen::moveDown()
 	}
 }
 	
-Window::vec2d Screen::getScreenSize()
+Window::vec2d Screen::getScreenSize() const
 {
 	uint32_t row, col;
 	getmaxyx(stdscr,row,col);
@@ -93,7 +93,7 @@ Window::vec2d Screen::getScreenSize()
 
 void Screen::insert()
 {
-	std::string message("Insert ticker:");
+	const std::string message("Insert ticker:");
 	_commandLine.print(0,0,message.c_str());
 
 	std::string ticker;
@@ -117,7 +117,7 @@ void Screen::insert()
 				break;
 		}
 	}
-	auto position = begin(_tickers) + _activeRow;
+	const auto position = begin(_tickers) + _activeRow;
 	_tickers.insert(position,ticker);
 	_commandLine.clear();
 	_commandLine.refresh();
@@ -130,9 +130,9 @@ void Screen::remove()
 {
 	if (_activeRow == 0 and _tickers.size() == 1)
 		return;
-	auto posTick = begin(_tickers) + _activeRow;
+	const auto posTick = begin(_tickers) + _activeRow;
 	_tickers.erase(posTick);
-	auto posTable = begin(*_dataTable) + _activeRow;
+	const auto posTable = begin(*_dataTable) + _activeRow;
 	(*_dataTable).erase(posTable);
 	if (_activeRow == _tickers.size()) {
 		_windows[_activeRow].color(2);
