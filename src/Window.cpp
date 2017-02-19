@@ -47,8 +47,6 @@ Window& Window::operator= (Window&& other) noexcept
 /* Destructor */
 Window::~Window() noexcept
 {
-	wclear(_window);
-	wrefresh(_window);	
 	delwin(_window);
 }
 
